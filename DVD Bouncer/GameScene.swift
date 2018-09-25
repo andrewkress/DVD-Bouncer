@@ -15,7 +15,7 @@ class GameScene: SKScene {
     
     override func didMove(to view: SKView) {
         backgroundColor = SKColor.black
-        bouncer.position = CGPoint(x: size.width * Float.random(in: 0..<1), y: size.height * Float.random(in: 0..<1))
+        bouncer.position = CGPoint(x: size.width * drand48(), y: size.height * drand48())
         addChild(bouncer)
     }
     
