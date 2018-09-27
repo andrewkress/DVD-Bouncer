@@ -11,7 +11,7 @@ import GameplayKit
 
 class GameScene: SKScene {
     
-    private var bouncer = SKSpriteNode(imageNamed: "dvd-white")
+    private var bouncer
     private var TIME_INTERVAL = 2
     
     override func didMove(to view: SKView) {
@@ -24,6 +24,10 @@ class GameScene: SKScene {
         addChild(bouncer)
         let force = SKAction.applyForce(CGVector(dx: 300, dy: 300) , duration: 0.1)
         bouncer.run(force)
+    }
+
+    override func didBeginContact(contact: SKPhysicsContact) {
+        // change bouncer texture?
     }
 
     func bouncerSprite() -> SKSpriteNode {
