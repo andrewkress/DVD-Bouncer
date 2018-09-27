@@ -9,16 +9,18 @@
 import SpriteKit
 import GameplayKit
 
-class GameScene: SKScene {
+class GameScene: SKScene, SKPhysicsContactDelegate {
     
-    private var bouncer
+    private var bouncer = SKSpriteNode(imageNamed: "dvd-white")
     private var TIME_INTERVAL = 2
     
     override func didMove(to view: SKView) {
         let borderBody = SKPhysicsBody(edgeLoopFrom: self.frame)
         borderBody.friction = 0
         borderBody.categoryBitMask = 1
-        self.physicsBody = borderBody
+        physicsWorld.contactDelegate = self
+        physicsBody = borderBody
+        
         backgroundColor = SKColor.black
         bouncer = bouncerSprite()
         addChild(bouncer)
@@ -26,7 +28,7 @@ class GameScene: SKScene {
         bouncer.run(force)
     }
 
-    override func didBeginContact(contact: SKPhysicsContact) {
+    func didBegin(_ contact: SKPhysicsContact) {
         // change bouncer texture?
         bouncer.color = .red
         bouncer.colorBlendFactor = 1.0
@@ -35,11 +37,12 @@ class GameScene: SKScene {
     func bouncerSprite() -> SKSpriteNode {
         let bouncer = SKSpriteNode(imageNamed: "dvd-white")
         bouncer.position = CGPoint(x: frame.width/2, y: frame.height/2)
-        bouncer.physicsBody = SKPhysicsBody(circleOfRadius: bouncer.frame.height / 2)
+        bouncer.physicsBody = SKPhysicsBody(rectangleOf: bouncer.frame.size)
         bouncer.physicsBody?.categoryBitMask = 0x1
         bouncer.physicsBody?.restitution = 1
         bouncer.physicsBody?.friction = 0
         bouncer.physicsBody?.collisionBitMask = 0x1
+        bouncer.physicsBody?.contactTestBitMask = 0x1
         bouncer.physicsBody?.affectedByGravity = false
         bouncer.physicsBody?.angularDamping = 0
         bouncer.physicsBody?.linearDamping = 0
