@@ -28,6 +28,8 @@ class GameScene: SKScene {
 
     override func didBeginContact(contact: SKPhysicsContact) {
         // change bouncer texture?
+        bouncer.color = .red
+        bouncer.colorBlendFactor = 1.0
     }
 
     func bouncerSprite() -> SKSpriteNode {
