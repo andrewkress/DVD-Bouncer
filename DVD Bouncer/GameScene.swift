@@ -13,6 +13,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     private var bouncer = SKSpriteNode(imageNamed: "dvd-white")
     private var TIME_INTERVAL = 2
+    private var colors :Array<UIColor> = [.blue, .brown, .cyan, .gray, .green, .magenta, .orange, .purple, .red, .yellow, .clear]
     
     override func didMove(to view: SKView) {
         let borderBody = SKPhysicsBody(edgeLoopFrom: self.frame)
@@ -30,13 +31,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
     func didBegin(_ contact: SKPhysicsContact) {
         // change bouncer texture?
-        bouncer.color = .red
+        let newColor = colors.remove(at: 0)
+        bouncer.color = newColor
         bouncer.colorBlendFactor = 1.0
+        colors.append(newColor)
     }
 
     func bouncerSprite() -> SKSpriteNode {
         let bouncer = SKSpriteNode(imageNamed: "dvd-white")
-        bouncer.position = CGPoint(x: frame.width/2, y: frame.height/2)
+        bouncer.position = CGPoint(x: frame.width * CGFloat(drand48()), y: frame.height * CGFloat(drand48()))
         bouncer.physicsBody = SKPhysicsBody(rectangleOf: bouncer.frame.size)
         bouncer.physicsBody?.categoryBitMask = 0x1
         bouncer.physicsBody?.restitution = 1
