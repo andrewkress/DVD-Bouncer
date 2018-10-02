@@ -9,16 +9,53 @@
 import SpriteKit
 import GameplayKit
 
-class GameScene: SKScene {
+class GameScene: SKScene, SKPhysicsContactDelegate {
     
     private var bouncer = SKSpriteNode(imageNamed: "dvd-white")
+    private var TIME_INTERVAL = 2
+    private var colors :Array<UIColor> = [.blue, .brown, .cyan, .gray, .green, .magenta, .orange, .purple, .red, .yellow, .clear]
     
     override func didMove(to view: SKView) {
+        let borderBody = SKPhysicsBody(edgeLoopFrom: self.frame)
+        borderBody.friction = 0
+        borderBody.categoryBitMask = 1
+        physicsWorld.contactDelegate = self
+        physicsBody = borderBody
+        
         backgroundColor = SKColor.black
-        bouncer.position = CGPoint(x: size.width * CGFloat(drand48()), y: size.height * CGFloat(drand48()))
+        bouncer = bouncerSprite()
         addChild(bouncer)
+        let force = SKAction.applyForce(CGVector(dx: 300, dy: 300) , duration: 0.1)
+        bouncer.run(force)
+    }
+
+    func didBegin(_ contact: SKPhysicsContact) {
+        // change bouncer texture?
+        let newColor = colors.remove(at: 0)
+        bouncer.color = newColor
+        bouncer.colorBlendFactor = 1.0
+        colors.append(newColor)
+    }
+
+    func bouncerSprite() -> SKSpriteNode {
+        let bouncer = SKSpriteNode(imageNamed: "dvd-white")
+        bouncer.position = CGPoint(x: frame.width * CGFloat(drand48()), y: frame.height * CGFloat(drand48()))
+        bouncer.physicsBody = SKPhysicsBody(rectangleOf: bouncer.frame.size)
+        bouncer.physicsBody?.categoryBitMask = 0x1
+        bouncer.physicsBody?.restitution = 1
+        bouncer.physicsBody?.friction = 0
+        bouncer.physicsBody?.collisionBitMask = 0x1
+        bouncer.physicsBody?.contactTestBitMask = 0x1
+        bouncer.physicsBody?.affectedByGravity = false
+        bouncer.physicsBody?.angularDamping = 0
+        bouncer.physicsBody?.linearDamping = 0
+        return bouncer
     }
     
+    func moveBouncer() {
+        let actionMove = SKAction.move(to: CGPoint(x: size.width * CGFloat(drand48()), y: size.height - bouncer.size.height), duration: TimeInterval(TIME_INTERVAL))
+        bouncer.run(actionMove)
+    }
     
     func touchDown(atPoint pos : CGPoint) {
         /* if let n = self.spinnyNode?.copy() as! SKShapeNode? {
