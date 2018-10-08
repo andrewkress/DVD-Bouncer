@@ -3,7 +3,7 @@
     {
       "orientation" : "landscape",
       "idiom" : "tv",
-      "filename" : "Launch2x.png",
+      "filename" : "LaunchImage@2x.png",
       "extent" : "full-screen",
       "minimum-system-version" : "11.0",
       "scale" : "2x"
@@ -11,7 +11,7 @@
     {
       "orientation" : "landscape",
       "idiom" : "tv",
-      "filename" : "Launch1x.png",
+      "filename" : "LaunchImage.png",
       "extent" : "full-screen",
       "minimum-system-version" : "9.0",
       "scale" : "1x"
