@@ -14,8 +14,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     private var bouncer = SKSpriteNode(imageNamed: "dvd-white")
     private var TIME_INTERVAL = 2
     private var colors :Array<UIColor> = [.blue, .brown, .cyan, .gray, .green, .magenta, .orange, .purple, .red, .yellow, .clear]
+    let tapRec = UITapGestureRecognizer()
+    private var bouncerType = "dvd-white"
+    private var prisonMike = SKTexture(imageNamed: "prison-mike")
+    private var dvdWhite = SKTexture(imageNamed: "dvd-white")
     
     override func didMove(to view: SKView) {
+        tapRec.addTarget(self, action:#selector(GameScene.tappedView(_:) ))
+        //tapRec.numberOfTouchesRequired = 1
+        tapRec.numberOfTapsRequired = 2
+        self.view!.addGestureRecognizer(tapRec)
+
         let borderBody = SKPhysicsBody(edgeLoopFrom: self.frame)
         borderBody.friction = 0
         borderBody.categoryBitMask = 1
@@ -23,10 +32,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         physicsBody = borderBody
         
         backgroundColor = SKColor.black
-        bouncer = bouncerSprite()
+        bouncerSprite()
         addChild(bouncer)
-        let force = SKAction.applyForce(CGVector(dx: 300, dy: 300) , duration: 0.1)
-        bouncer.run(force)
+        moveBouncer()
     }
 
     func didBegin(_ contact: SKPhysicsContact) {
@@ -37,9 +45,28 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         colors.append(newColor)
     }
 
-    func bouncerSprite() -> SKSpriteNode {
-        let bouncer = SKSpriteNode(imageNamed: "dvd-white")
+    func bouncerSprite() {
+        bouncer = SKSpriteNode(imageNamed: "dvd-white")
         bouncer.position = CGPoint(x: frame.width * CGFloat(drand48()), y: frame.height * CGFloat(drand48()))
+        assignPhysicsBody()
+        //return bouncer
+    }
+
+    @objc func tappedView(_ sender:UITapGestureRecognizer) {
+        if(bouncerType == "dvd-white") {
+            bouncer.size = prisonMike.size()
+            bouncer.texture = prisonMike
+            bouncerType = "prison-mike"
+            //assignPhysicsBody()
+        } else {
+            bouncer.size = dvdWhite.size()
+            bouncer.texture = dvdWhite
+            bouncerType = "dvd-white"
+            //assignPhysicsBody()
+        }
+    }
+    
+    func assignPhysicsBody() {
         bouncer.physicsBody = SKPhysicsBody(rectangleOf: bouncer.frame.size)
         bouncer.physicsBody?.categoryBitMask = 0x1
         bouncer.physicsBody?.restitution = 1
@@ -49,12 +76,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         bouncer.physicsBody?.affectedByGravity = false
         bouncer.physicsBody?.angularDamping = 0
         bouncer.physicsBody?.linearDamping = 0
-        return bouncer
     }
     
     func moveBouncer() {
-        let actionMove = SKAction.move(to: CGPoint(x: size.width * CGFloat(drand48()), y: size.height - bouncer.size.height), duration: TimeInterval(TIME_INTERVAL))
-        bouncer.run(actionMove)
+        //let actionMove = SKAction.move(to: CGPoint(x: size.width * CGFloat(drand48()), y: size.height - bouncer.size.height), duration: TimeInterval(TIME_INTERVAL))
+        //bouncer.run(actionMove)
+        let force = SKAction.applyForce(CGVector(dx: 300, dy: 300) , duration: 0.1)
+        bouncer.run(force)
     }
     
     func touchDown(atPoint pos : CGPoint) {
