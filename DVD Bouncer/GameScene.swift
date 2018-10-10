@@ -13,7 +13,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     private var bouncer = SKSpriteNode(imageNamed: "dvd-white")
     private var TIME_INTERVAL = 2
-    private var colors :Array<UIColor> = [.blue, .brown, .cyan, .gray, .green, .magenta, .orange, .purple, .red, .yellow, .clear]
+    private var colors :Array<UIColor> = [.blue, .brown, .cyan, .gray, .green, .magenta, .orange, .purple, .red, .yellow, .white]
     let tapRec = UITapGestureRecognizer()
     private var bouncerType = "dvd-white"
     private var prisonMike = SKTexture(imageNamed: "prison-mike")
