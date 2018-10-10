@@ -14,8 +14,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     private var bouncer = SKSpriteNode(imageNamed: "dvd-white")
     private var TIME_INTERVAL = 2
     private var colors :Array<UIColor> = [.blue, .brown, .cyan, .gray, .green, .magenta, .orange, .purple, .red, .yellow, .clear]
+    let tapRec = UITapGestureRecognizer()
     
     override func didMove(to view: SKView) {
+        tapRec.addTarget(self, action:#selector(GameScene.tappedView(_:) ))
+        tapRec.numberOfTouchesRequired = 1
+        tapRec.numberOfTapsRequired = 2
+        self.view!.addGestureRecognizer(tapRec)
+
         let borderBody = SKPhysicsBody(edgeLoopFrom: self.frame)
         borderBody.friction = 0
         borderBody.categoryBitMask = 1
@@ -50,6 +56,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         bouncer.physicsBody?.angularDamping = 0
         bouncer.physicsBody?.linearDamping = 0
         return bouncer
+    }
+
+    func tappedView(_ sender:UITapGestureRecognizer) {
+        if(bouncer.imageNamed == "dvd-white") {
+            bouncer.imageNamed = "prison-mike"
+        } else {
+            bouncer.imageNamed = "dvd-white"
+        }
     }
     
     func moveBouncer() {
